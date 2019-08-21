@@ -9,3 +9,6 @@ p {
     flex-direction: row;
     justify-content: center;
 }
+.temp::after {
+    content: '\00B0';
+}
