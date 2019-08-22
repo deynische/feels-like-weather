@@ -1,7 +1,7 @@
 // CORS proxy server workaround for Dark Sky API
 var url = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/' + config.DARKSKY_KEY;
-// temp unit state
-var temp = ''
+// unit flag
+var unit = ''
 
 window.onload = function() {
     // html elements
@@ -10,8 +10,8 @@ window.onload = function() {
     var Fbtn = document.getElementById('degF');
     var Cbtn = document.getElementById('degC');
     // event listeners
-    Fbtn.addEventListener('click',updateTemp);
-    Cbtn.addEventListener('click',updateTemp);
+    Fbtn.addEventListener('click',convertTemp);
+    Cbtn.addEventListener('click',convertTemp);
 
     // check for geolocation
     if ("geolocation" in navigator) {
@@ -22,14 +22,14 @@ window.onload = function() {
                 .then(response => response.json())
                 .then(data => {
                     // set temp unit state
-                    temp = data.flags.units;
-                    updateBtn(temp);
+                    unit = data.flags.units;
+                    updateBtn(unit);
                     // build display output
-                    var ambient = createElement('p',data.currently.apparentTemperature,'class','temp ambient');
+                    var ambient = createElement('p',Math.round(data.currently.apparentTemperature),'class','temp ambient');
                     var forecast = createElement('p',data.currently.summary,'class','forecast');
                     var wrapper = createElement('div','','class','wrapper');
-                    var hi = createElement('span',data.daily.data[0].temperatureHigh,'class','temp');
-                    var lo = createElement('span',data.daily.data[0].temperatureLow,'class','temp');
+                    var hi = createElement('span',Math.round(data.daily.data[0].temperatureHigh),'class','temp');
+                    var lo = createElement('span',Math.round(data.daily.data[0].temperatureLow),'class','temp');
                     var rh = createElement('p','RH '+(data.currently.humidity*100)+'%');
                     var hiLabel = createElement('p','H ');
                     var loLabel = createElement('p','L ');
@@ -44,7 +44,7 @@ window.onload = function() {
     } else {
     
     };
-
+    
     // temp unit functions
     function updateBtn(state){
         if (state == 'us'){
@@ -53,15 +53,19 @@ window.onload = function() {
             Cbtn.checked = true;
         }
     }
-    function updateTemp(e){
-        temp = e.target.value;
-        var array = document.getElementsByClassName('temp');
-        console.log(array);
-        // cycle through all items with class temp and convert value to new temp unit
-        if (temp == 'SI') {
-            
-        } else if (temp == 'US') {
-    
+    function convertTemp(e){
+        // grab current html state
+        unit = e.target.value;
+        var arrayHTML = Array.from(document.getElementsByClassName('temp'));
+        // cycle through and convert temp to new unit
+        if (unit == 'SI') {
+            arrayHTML.forEach(function(o){
+                o.innerHTML = Math.round((o.innerHTML-32)*(5/9));
+            });
+        } else if (unit == 'US') {
+            arrayHTML.forEach(function(o){
+                o.innerHTML = Math.round((o.innerHTML*(9/5))+32);
+            });
         }
     }
 };
