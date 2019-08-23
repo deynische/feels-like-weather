@@ -12,3 +12,9 @@ p {
 .temp::after {
     content: '\00B0';
 }
+h1 > * {
+    display: block;
+}
+#locator label {
+    display: block;
+}
