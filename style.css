@@ -1,10 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans|Noto+Serif&display=swap');
+
 html {
     height: 100%;
-    width: 100%;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url('http://placekitten.com/800/600');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    width: 100%;   
 }
 body {
     height: 100%;
@@ -12,22 +10,34 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
+    font-family: 'Noto Sans', sans-serif;
     text-align: center;
     color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0)), url('img/default.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+h1, .forecast, #locator, footer {
+    font-family: 'Noto Serif', serif;
+}
+h1 {
+    margin-top: 4rem;
+    margin-bottom: 0;
+    font-size: 3rem;
+    line-height: 3.5rem;
+}
+.location {
+    font-size: 1.5rem;
+    margin-top: -2rem;
+    margin-bottom: -0.75rem;
 }
 h1 > * {
     display: block;
 }
-#locator label {
-    display: block;
-}
 p {
     display: block;
-}
-.wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 }
 #displayInfo {
     flex: 1;
@@ -35,7 +45,50 @@ p {
 .temp::after {
     content: '\00B0';
 }
+.ambient {
+    margin: 2rem 0 0 41px;
+    font-size: 6rem;
+    line-height: 6rem;
+}
+.forecast {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.wrapper {
+    margin-left: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.wrapper p {
+    margin: 0;
+    padding: 0 0.5rem;
+}
+.wrapper>p:nth-child(2) {
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+}
+#locator label {
+    display: block;
+    font-size: 1rem;
+}
+#btn-toggle {
+    margin: 20px 0;
+}
+#btn-toggle input {
+    display: none;
+}
 footer {
     width: 100%;
+    padding: 10px 0;
+    font-size: 0.75rem;
     background-color: rgba(0, 0, 0, 0.8);
+}
+footer a {
+    color: white;
+}
+footer a:visited {
+    color: lightgray;
 }

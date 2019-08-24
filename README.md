@@ -15,7 +15,7 @@ As it is best practice to obfuscate API keys, this project will not work client-
 - [ ] Geocode location for weather API call
 - [ ] Format location error display
 - [ ] Prettify
-  - [ ] Obtain list of all possible weather returns from API
-  - [ ] Build list of background images per weather type
-  - [ ] Search forecast data for keywords to match a background image 
+  - [x] Obtain list of all possible weather returns from API
+  - [x] Build list of background images per weather type
+  - [x] Use forecast data to set a matching background image 
 - [ ] Refactor to work on GitHub pages

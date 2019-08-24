@@ -1,6 +1,10 @@
 // CORS proxy server workaround for Dark Sky API
 var url = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/' + config.DARKSKY_KEY;
 var geocode = 'https://api.opencagedata.com/geocode/v1/json?q=';
+// background images
+var img_bg = ['img/clear-day.jpg','img/clear-night.jpg','img/cloudy.jpg',
+              'img/fog.jpg','img/partly-cloudy-day.jpg','img/partly-cloudy-night.jpg',
+              'img/rain.jpg','img/sleet.jpg','img/snow.jpg','img/wind.jpg'];
 
 window.onload = function() {
     // html elements
@@ -9,15 +13,17 @@ window.onload = function() {
     var displayInfo = document.getElementById('displayInfo');
     var Fbtn = document.getElementById('degF');
     var Cbtn = document.getElementById('degC');
-    // unit flag
-    var unit = '';
-    // event listeners
-    Fbtn.addEventListener('click',convertTemp);
-    Cbtn.addEventListener('click',convertTemp);
-
     // location display
     var displayLoc = createElement('span','','class','location');
     pageTitle[0].prepend(displayLoc);
+    // unit flag
+    var unit = '';
+
+    // store raw temp data for conversion
+
+    // listen for unit change
+    Fbtn.addEventListener('change',convertTemp);
+    Cbtn.addEventListener('change',convertTemp);
 
     // check for geolocation
     if ("geolocation" in navigator) {
@@ -39,6 +45,8 @@ window.onload = function() {
                     // set temp unit state
                     unit = data.flags.units;
                     updateBtn(unit);
+                    // update background img
+                    updateImg(data.currently.icon);
                     // build display output
                     var ambient = createElement('p',Math.round(data.currently.apparentTemperature),'class','temp ambient');
                     var forecast = createElement('p',data.currently.summary,'class','forecast');
@@ -82,6 +90,13 @@ window.onload = function() {
                 o.innerHTML = Math.round((o.innerHTML*(9/5))+32);
             });
         }
+    }
+    // set background image based on Dark Sky icon data
+    function updateImg(dsIcon){
+        document.body.style.background = 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0)), url(img/'+dsIcon+'.jpg)';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundSize = 'cover';
     }
 };
 
