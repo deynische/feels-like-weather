@@ -1,5 +1,5 @@
 // CORS proxy server workaround for Dark Sky API
-var url = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/' + config.DARKSKY_KEY;
+var darksky = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/';
 var geocode = 'https://api.opencagedata.com/geocode/v1/json?q=';
 // background images
 var img_bg = ['img/clear-day.jpg','img/clear-night.jpg','img/cloudy.jpg',
@@ -16,11 +16,10 @@ window.onload = function() {
     // location display
     var displayLoc = createElement('span','','class','location');
     pageTitle[0].prepend(displayLoc);
-    // unit flag
-    var unit = '';
-
     // store raw temp data for conversion
-
+    var tempData = {'ambient':'','high':'','low':'','unit':''};
+    // unit state
+    var unit = '';
     // listen for unit change
     Fbtn.addEventListener('change',convertTemp);
     Cbtn.addEventListener('change',convertTemp);
@@ -38,21 +37,25 @@ window.onload = function() {
                 })
                 .catch(error => console.error(error))
             // call Dark Sky API using geolocation
-            url += '/'+position.coords.latitude+','+position.coords.longitude+'?units=auto';
-            fetch(url)
+            fetch(darksky+config.DARKSKY_KEY+'/'+position.coords.latitude+','+position.coords.longitude+'?units=auto')
                 .then(response => response.json())
                 .then(data => {
-                    // set temp unit state
+                    // set unit state
+                    tempData.unit = data.flags.units;
                     unit = data.flags.units;
                     updateBtn(unit);
+                    // store raw temp data
+                    tempData.ambient = data.currently.apparentTemperature;
+                    tempData.high = data.daily.data[0].temperatureHigh;
+                    tempData.low = data.daily.data[0].temperatureLow;
                     // update background img
                     updateImg(data.currently.icon);
                     // build display output
-                    var ambient = createElement('p',Math.round(data.currently.apparentTemperature),'class','temp ambient');
+                    var ambient = createElement('p',Math.round(tempData.ambient),'class','temp ambient');
                     var forecast = createElement('p',data.currently.summary,'class','forecast');
                     var wrapper = createElement('div','','class','wrapper');
-                    var hi = createElement('span',Math.round(data.daily.data[0].temperatureHigh),'class','temp');
-                    var lo = createElement('span',Math.round(data.daily.data[0].temperatureLow),'class','temp');
+                    var hi = createElement('span',Math.round(tempData.high),'class','temp');
+                    var lo = createElement('span',Math.round(tempData.low),'class','temp');
                     var rh = createElement('p','RH '+Math.round(data.currently.humidity*100)+'%');
                     var hiLabel = createElement('p','H ');
                     var loLabel = createElement('p','L ');
@@ -80,14 +83,26 @@ window.onload = function() {
         // grab current html state
         unit = e.target.value;
         var arrayHTML = Array.from(document.getElementsByClassName('temp'));
-        // cycle through and convert temp to new unit
-        if (unit == 'SI') {
+        // grab keys to cycle through raw data
+        var key = Object.keys(tempData);
+        // compare units and convert temp as needed
+        if (unit == tempData.unit){
+            var k = 0;
             arrayHTML.forEach(function(o){
-                o.innerHTML = Math.round((o.innerHTML-32)*(5/9));
+                o.innerHTML = Math.round(tempData[key[k]]);
+                k++;
             });
-        } else if (unit == 'US') {
+        } else if (unit == 'us' && tempData.unit == 'si'){
+            var k = 0;
             arrayHTML.forEach(function(o){
-                o.innerHTML = Math.round((o.innerHTML*(9/5))+32);
+                o.innerHTML = toF(tempData[key[k]]);
+                k++;
+            });
+        } else if (unit == 'si' && tempData.unit == 'us'){
+            var k = 0;
+            arrayHTML.forEach(function(o){
+                o.innerHTML = toC(tempData[key[k]]);
+                k++;
             });
         }
     }
@@ -108,4 +123,11 @@ function createElement(el,content,attr,attrValue){
         newEl.setAttribute(attr,attrValue);
     }
     return newEl;
+}
+// unit conversion
+function toF(n){
+    return Math.round((n*(9/5))+32);
+}
+function toC(n){
+    return Math.round((n-32)*(5/9));
 }
