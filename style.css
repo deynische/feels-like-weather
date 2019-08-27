@@ -45,7 +45,7 @@ p {
 .temp::after {
     content: '\00B0';
 }
-.ambient {
+.current {
     margin: 2rem 0 0 41px;
     font-size: 6rem;
     line-height: 6rem;
@@ -85,6 +85,9 @@ footer {
     padding: 10px 0;
     font-size: 0.75rem;
     background-color: rgba(0, 0, 0, 0.8);
+}
+footer span {
+    display: block;
 }
 footer a {
     color: white;

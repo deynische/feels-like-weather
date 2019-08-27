@@ -1,12 +1,16 @@
 # Feels Like Weather
-A simple page showing the current ambient weather using [Dark Sky API](https://darksky.net/dev) and [OpenCage Geocoding API](https://opencagedata.com/).
+A simple page showing the current weather using geolocation and API data.
 
-This project is based on the [freeCodeCamp local weather project](https://learn.freecodecamp.org/coding-interview-prep/take-home-projects/show-the-local-weather/).
+This is based on the [freeCodeCamp local weather project](https://learn.freecodecamp.org/coding-interview-prep/take-home-projects/show-the-local-weather/).
 
 Images from Unsplash and Pixabay.
 
-## Notice
-As it is best practice to obfuscate API keys, this project will not work client-side without my API keys. Current thoughts are to either implement CodePen's solution of prompting the user for an API key or to refactor the project to use the [freeCodeCamp Weather API](https://fcc-weather-api.glitch.me/).
+## A Note On APIs
+This project is originally built to use the [Dark Sky API](https://darksky.net/dev) and [OpenCage Geocoding API](https://opencagedata.com/). However, as it is best practice to obfuscate API keys, client-side projects will not work without exposing the keys to potential abuse.
+
+As an alternative, this project checks for the existence of keys and uses the [freeCodeCamp Weather API](https://fcc-weather-api.glitch.me/) in their absence.
+
+One small difference is the Dark Sky version uses apparent temperature while the FCC version uses current temperature.
 
 ## To Do
 - [x] Set up geolocation
@@ -25,3 +29,6 @@ As it is best practice to obfuscate API keys, this project will not work client-
   - [ ] Radio button group
   - [ ] Search input 
 - [ ] Refactor to work on GitHub pages
+  - [x] Determine which APIs to use
+  - [ ] Clean up repetitive code
+  - [ ] Fix background image display
